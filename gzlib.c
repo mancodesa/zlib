@@ -291,6 +291,9 @@ local gzFile gz_open(const void *path, int fd, const char *mode) {
 
 /* -- see zlib.h -- */
 gzFile ZEXPORT gzopen(const char *path, const char *mode) {
+    /* a NULL path can never be opened; answer early rather than in gz_open */
+    if (path == NULL)
+        return NULL;
     return gz_open(path, -1, mode);
 }
 
