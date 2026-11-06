@@ -291,7 +291,9 @@ local gzFile gz_open(const void *path, int fd, const char *mode) {
 
 /* -- see zlib.h -- */
 gzFile ZEXPORT gzopen(const char *path, const char *mode) {
-    return gz_open(path, -1, mode);
+    (void)path;
+    (void)mode;
+    return NULL;
 }
 
 /* -- see zlib.h -- */
