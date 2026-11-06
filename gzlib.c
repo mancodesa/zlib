@@ -67,20 +67,26 @@ char ZLIB_INTERNAL *gz_strwinerror(DWORD error) {
 
 /* Reset gzip file state */
 local void gz_reset(gz_statep state) {
+    const int reading = state->mode == GZ_READ;
+
+    /* common state, whichever direction the stream is open in */
     state->x.have = 0;              /* no output data available */
+    state->x.pos = 0;               /* no uncompressed data yet */
     state->past = 0;                /* have not read past end yet */
-    if (state->mode == GZ_READ) {   /* for reading ... */
+    state->again = 0;               /* no stalled i/o yet */
+    state->skip = 0;                /* no seek request pending */
+    state->strm.avail_in = 0;       /* no input data yet */
+
+    /* direction-specific state */
+    if (reading) {
         state->eof = 0;             /* not at end of file */
         state->how = LOOK;          /* look for gzip header */
         state->junk = -1;           /* mark first member */
     }
-    else                            /* for writing ... */
+    else
         state->reset = 0;           /* no deflateReset pending */
-    state->again = 0;               /* no stalled i/o yet */
-    state->skip = 0;                /* no seek request pending */
+
     gz_error(state, Z_OK, NULL);    /* clear error */
-    state->x.pos = 0;               /* no uncompressed data yet */
-    state->strm.avail_in = 0;       /* no input data yet */
 }
 
 /* Open a gzip file either by name or file descriptor. */
