@@ -288,7 +288,10 @@ int ZEXPORT gzwrite(gzFile file, voidpc buf, unsigned len) {
     }
 
     /* write len bytes from buf (the return value will fit in an int) */
-    return (int)gz_write(state, buf, len);
+    {
+        z_size_t written = gz_write(state, buf, len);
+        return (int)written;
+    }
 }
 
 /* -- see zlib.h -- */
