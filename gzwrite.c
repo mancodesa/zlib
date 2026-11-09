@@ -131,7 +131,7 @@ local int gz_comp(gz_statep state, int flush) {
         /* compress */
         have = strm->avail_out;
         ret = deflate(strm, flush);
-        if (ret == Z_STREAM_ERROR) {
+        if (ret == Z_STREAM_ERROR || flush != Z_NO_FLUSH) {
             gz_error(state, Z_STREAM_ERROR,
                       "internal error: deflate stream corrupt");
             return -1;
