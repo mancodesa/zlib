@@ -64,7 +64,8 @@ local int gz_init(gz_statep state) {
    to the output file without compressing, and ignore flush. */
 local int gz_comp(gz_statep state, int flush) {
     int ret, writ;
-    unsigned have, put, max = ((unsigned)-1 >> 2) + 1;
+    unsigned have, put;
+    const unsigned max = ((unsigned)-1 >> 2) + 1;
     z_streamp strm = &(state->strm);
 
     /* allocate memory if this is the first time through */
